@@ -4,24 +4,15 @@ import (
 	"log"
 	"net/http"
 
-	_ "github.com/akshay111meher/sample-go-server/docs"
-	server "github.com/akshay111meher/sample-go-server/go"
+	"github.com/akshay111meher/sample-go-server/go"
 	"github.com/akshay111meher/sample-go-server/go/db"
-	keyMgmt "github.com/akshay111meher/sample-go-server/go/key_management"
-	"github.com/go-chi/chi"
+	"github.com/akshay111meher/sample-go-server/go/key_management"
 	"github.com/gorilla/handlers"
-	"github.com/swaggo/http-swagger"
 )
 
 func main() {
-	r := chi.NewRouter()
 
-	log.Printf("Server started")
-	r.Get("/swagger/*", httpSwagger.WrapHandler)
-
-	http.ListenAndServe(":8000", r)
-
-	keyMgmt.StartRedis()
+	keymanagement.StartRedis()
 	db.StartMongo()
 	router := server.NewRouter()
 
