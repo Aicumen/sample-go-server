@@ -2,19 +2,24 @@ package api
 
 import (
 	"encoding/json"
+	"math/rand"
 	"net/http"
+
+	"github.com/akshay111meher/sample-go-server/go/db"
+	keyMgmt "github.com/akshay111meher/sample-go-server/go/key_management"
+	"github.com/akshay111meher/sample-go-server/go/models"
 )
 
 // UserCreatePost ...
 func UserCreatePost(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
-	var user User
+	var user models.User
 	err := decoder.Decode(&user)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Failed Creating user"))
 	} else {
-		err = AddUser(user)
+		err = db.AddUser(user)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			temp, _ := json.Marshal(err)
@@ -29,13 +34,13 @@ func UserCreatePost(w http.ResponseWriter, r *http.Request) {
 // UserLoginPost ...
 func UserLoginPost(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
-	var requestUser User
+	var requestUser models.User
 	err := decoder.Decode(&requestUser)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Failed login"))
 	} else {
-		user, err := GetUser(requestUser.User)
+		user, err := db.GetUser(requestUser.User)
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -43,7 +48,7 @@ func UserLoginPost(w http.ResponseWriter, r *http.Request) {
 			w.Write(temp)
 		} else {
 			if requestUser.Password == user.Password && requestUser.User == requestUser.User {
-				key, err := CreateAPIKey(user.User)
+				key, err := keyMgmt.CreateAPIKey(user.User)
 				if err != nil {
 					w.WriteHeader(http.StatusInternalServerError)
 					temp, _ := json.Marshal(err)
@@ -64,12 +69,12 @@ func UserLoginPost(w http.ResponseWriter, r *http.Request) {
 func UserLogoutGet(w http.ResponseWriter, r *http.Request) {
 
 	apikey := r.URL.Query().Get(apikeyQueryParam)
-	user, err := GetValueFromKey(apikey)
+	user, err := keyMgmt.GetValueFromKey(apikey)
 	if err != nil || user == "" {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Probablty you are not logged in"))
 	} else {
-		DeleteKeyValuePair(apikey)
+		keyMgmt.DeleteKeyValuePair(apikey)
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Logged out successfully"))
 	}
@@ -79,12 +84,12 @@ func UserLogoutGet(w http.ResponseWriter, r *http.Request) {
 // UserMypostsGet ...
 func UserMypostsGet(w http.ResponseWriter, r *http.Request) {
 	apikey := r.URL.Query().Get(apikeyQueryParam)
-	user, err := GetValueFromKey(apikey)
+	user, err := keyMgmt.GetValueFromKey(apikey)
 	if err != nil || user == "" {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Probablty you are not logged in"))
 	} else {
-		posts, err := UsersPosts(user)
+		posts, err := db.UsersPosts(user)
 		if err != nil || len(posts) < 1 {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("Internal Error or No Posts"))
@@ -99,4 +104,14 @@ func UserMypostsGet(w http.ResponseWriter, r *http.Request) {
 			w.Write(postsMarshall)
 		}
 	}
+}
+
+var letterRunes = []rune("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func randStringRunes(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	return string(b)
 }

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/akshay111meher/sample-go-server/go/api"
 	"github.com/gorilla/mux"
 )
 
@@ -54,62 +55,62 @@ var routes = Routes{
 		"PostCommentPost",
 		strings.ToUpper("Post"),
 		"/v1/post/comment",
-		PostCommentPost,
+		api.PostCommentPost,
 	},
 
 	Route{
 		"PostCreatePost",
 		strings.ToUpper("Post"),
 		"/v1/post/create",
-		PostCreatePost,
+		api.PostCreatePost,
 	},
 
 	Route{
 		"PostDislikePost",
 		strings.ToUpper("Post"),
 		"/v1/post/dislike",
-		PostDislikePost,
+		api.PostDislikePost,
 	},
 
 	Route{
 		"PostLikePost",
 		strings.ToUpper("Post"),
 		"/v1/post/like",
-		PostLikePost,
+		api.PostLikePost,
 	},
 
 	Route{
 		"UserCreatePost",
 		strings.ToUpper("Post"),
 		"/v1/user/create",
-		UserCreatePost,
+		api.UserCreatePost,
 	},
 
 	Route{
 		"UserLoginPost",
 		strings.ToUpper("Post"),
 		"/v1/user/login",
-		UserLoginPost,
+		api.UserLoginPost,
 	},
 
 	Route{
 		"UserLogoutGet",
 		strings.ToUpper("Get"),
 		"/v1/user/logout",
-		UserLogoutGet,
+		api.UserLogoutGet,
 	},
 
 	Route{
 		"UserMypostsGet",
 		strings.ToUpper("Get"),
 		"/v1/user/myposts",
-		UserMypostsGet,
+		api.UserMypostsGet,
 	},
 
 	Route{
 		"LatestGet",
 		strings.ToUpper("Get"),
 		"/v1/latest",
-		LatestGet,
+		api.LatestGet,
 	},
 }

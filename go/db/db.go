@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	models "github.com/akshay111meher/sample-go-server/go/models"
 	"github.com/mongodb/mongo-go-driver/bson"
 	"github.com/mongodb/mongo-go-driver/mongo"
 	"github.com/mongodb/mongo-go-driver/mongo/options"
@@ -36,7 +37,7 @@ func StartMongo() {
 }
 
 // AddUser ...
-func AddUser(user User) error {
+func AddUser(user models.User) error {
 
 	collection := database.Collection(userCollection)
 	_, err := collection.InsertOne(context.Background(), user)
@@ -47,19 +48,19 @@ func AddUser(user User) error {
 }
 
 // GetUser ...
-func GetUser(user string) (User, error) {
-	var tempUser User
+func GetUser(user string) (models.User, error) {
+	var tempUser models.User
 	collection := database.Collection(userCollection)
 	err := collection.FindOne(context.Background(), bson.M{"user": user}).Decode(&tempUser)
 
 	if err != nil {
-		return User{}, err
+		return models.User{}, err
 	}
 	return tempUser, nil
 }
 
 // AddPost ...
-func AddPost(post Posts) error {
+func AddPost(post models.Posts) error {
 	collection := database.Collection(postCollection)
 	_, err := collection.InsertOne(context.Background(), post)
 	if err != nil {
@@ -70,19 +71,19 @@ func AddPost(post Posts) error {
 }
 
 // GetPost ...
-func GetPost(postID string) (Posts, error) {
-	var tempPost Posts
+func GetPost(postID string) (models.Posts, error) {
+	var tempPost models.Posts
 	collection := database.Collection(postCollection)
 	err := collection.FindOne(context.Background(), bson.M{"_id": postID}).Decode(&tempPost)
 	if err != nil {
-		return Posts{}, err
+		return models.Posts{}, err
 	}
 	return tempPost, nil
 }
 
 //LatestPosts ...
-func LatestPosts() ([]Posts, error) {
-	var posts []Posts
+func LatestPosts() ([]models.Posts, error) {
+	var posts []models.Posts
 	var options options.FindOptions
 	var limit int64 = 10
 	options.Limit = &limit
@@ -95,7 +96,7 @@ func LatestPosts() ([]Posts, error) {
 	defer cur.Close(context.Background())
 
 	for cur.Next(context.Background()) {
-		var elem Posts
+		var elem models.Posts
 		err := cur.Decode(&elem)
 		if err != nil {
 			fmt.Println(err)
@@ -106,8 +107,8 @@ func LatestPosts() ([]Posts, error) {
 }
 
 // UsersPosts ...
-func UsersPosts(user string) ([]Posts, error) {
-	var posts []Posts
+func UsersPosts(user string) ([]models.Posts, error) {
+	var posts []models.Posts
 	var options options.FindOptions
 	var limit int64 = 10
 	options.Limit = &limit
@@ -120,7 +121,7 @@ func UsersPosts(user string) ([]Posts, error) {
 	defer cur.Close(context.Background())
 
 	for cur.Next(context.Background()) {
-		var elem Posts
+		var elem models.Posts
 		err := cur.Decode(&elem)
 		if err != nil {
 			fmt.Println(err)
@@ -131,7 +132,7 @@ func UsersPosts(user string) ([]Posts, error) {
 }
 
 // AddComment ...
-func AddComment(comment CommentInput) error {
+func AddComment(comment models.CommentInput) error {
 	_, err := GetPost(comment.Id)
 
 	if err != nil {
@@ -150,8 +151,8 @@ func AddComment(comment CommentInput) error {
 }
 
 // LikePost ...
-func LikePost(postInput PostInput) error {
-	var tempPost Posts
+func LikePost(postInput models.PostInput) error {
+	var tempPost models.Posts
 	collection := database.Collection(postCollection)
 	err := collection.FindOne(context.Background(), bson.M{"_id": postInput.Id}).Decode(&tempPost)
 
@@ -169,8 +170,8 @@ func LikePost(postInput PostInput) error {
 }
 
 // DislikePost ...
-func DislikePost(postInput PostInput) error {
-	var tempPost Posts
+func DislikePost(postInput models.PostInput) error {
+	var tempPost models.Posts
 	collection := database.Collection(postCollection)
 	err := collection.FindOne(context.Background(), bson.M{"_id": postInput.Id}).Decode(&tempPost)
 
