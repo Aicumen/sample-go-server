@@ -11,6 +11,12 @@ import (
 var apikeyQueryParam = "apikey"
 
 // LatestGet ...
+// @Summary List Posts
+// @Description get posts
+// @Produce  json
+// @Param apikey query string false "apikey"
+// @Success 200 {array} models.Posts
+// @Router /latest [get]
 func LatestGet(w http.ResponseWriter, r *http.Request) {
 	apikey := r.URL.Query().Get(apikeyQueryParam)
 	user, err := keyMgmt.GetValueFromKey(apikey)

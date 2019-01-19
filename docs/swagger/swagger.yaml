@@ -1,23 +1,55 @@
+basePath: /v1
 definitions:
-  models.CommentInput:
+  models.Comments:
+    properties:
+      comment:
+        type: string
+      user:
+        type: string
+    type: object
+  models.Posts:
     properties:
       _id:
         type: string
-      apikey:
+      comments:
+        items:
+          $ref: '#/definitions/models.Comments'
+        type: array
+      content:
         type: string
-      comment:
-        type: string
-    type: object
-  models.ModelError:
-    properties:
-      additional:
-        type: string
-      code:
+      dislikes:
         type: integer
-      message:
+      imageURL:
+        type: string
+      likes:
+        type: integer
+      user:
         type: string
     type: object
+host: localhost:8000
 info:
   contact: {}
+  description: '{{.Description}}'
   license: {}
-paths: {}
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /latest:
+    get:
+      description: get posts
+      parameters:
+      - description: apikey
+        in: query
+        name: apikey
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Posts'
+            type: array
+      summary: List Posts
+swagger: "2.0"

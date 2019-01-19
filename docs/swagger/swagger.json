@@ -1,34 +1,81 @@
 {
+    "swagger": "2.0",
     "info": {
+        "description": "{{.Description}}",
+        "title": "Swagger Example API",
         "contact": {},
-        "license": {}
+        "license": {},
+        "version": "1.0"
     },
-    "paths": {},
+    "host": "localhost:8000",
+    "basePath": "/v1",
+    "paths": {
+        "/latest": {
+            "get": {
+                "description": "get posts",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List Posts",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "apikey",
+                        "name": "apikey",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Posts"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
     "definitions": {
-        "models.CommentInput": {
+        "models.Comments": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Posts": {
             "type": "object",
             "properties": {
                 "_id": {
                     "type": "string"
                 },
-                "apikey": {
+                "comments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Comments"
+                    }
+                },
+                "content": {
                     "type": "string"
                 },
-                "comment": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.ModelError": {
-            "type": "object",
-            "properties": {
-                "additional": {
-                    "type": "string"
-                },
-                "code": {
+                "dislikes": {
                     "type": "integer"
                 },
-                "message": {
+                "imageURL": {
+                    "type": "string"
+                },
+                "likes": {
+                    "type": "integer"
+                },
+                "user": {
                     "type": "string"
                 }
             }
