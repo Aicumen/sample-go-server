@@ -11,6 +11,10 @@ import (
 )
 
 // PostCommentPost ...
+// @Success 200 {object} models.CommentInput
+// @Failure 500 {object} models.ModelError
+// @Accept  json
+// @Produce  json
 func PostCommentPost(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var commentsInput models.CommentInput
