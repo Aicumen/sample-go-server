@@ -15,7 +15,7 @@ import (
 // @title Swagger Example API
 // @version 1.0
 // @BasePath /v1
-// @host localhost:8000
+// @host localhost:8080
 func main() {
 
 	// go startChi()

@@ -7,7 +7,7 @@
         "license": {},
         "version": "1.0"
     },
-    "host": "localhost:8000",
+    "host": "localhost:8080",
     "basePath": "/v1",
     "paths": {
         "/latest": {
@@ -22,7 +22,15 @@
                         "type": "string",
                         "description": "apikey",
                         "name": "apikey",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {

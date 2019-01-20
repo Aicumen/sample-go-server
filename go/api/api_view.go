@@ -14,7 +14,8 @@ var apikeyQueryParam = "apikey"
 // @Summary List Posts
 // @Description get posts
 // @Produce  json
-// @Param apikey query string false "apikey"
+// @Param apikey query string true "apikey"
+// @Param offset query int true "offset"
 // @Success 200 {array} models.Posts
 // @Router /latest [get]
 func LatestGet(w http.ResponseWriter, r *http.Request) {
