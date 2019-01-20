@@ -26,9 +26,12 @@ func LatestGet(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Probablty you are not logged in"))
 	} else {
 		posts, err := db.LatestPosts()
-		if err != nil || len(posts) < 1 {
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("Internal Error or No Posts"))
+		} else if len(posts) < 1 {
+			w.WriteHeader(http.StatusPartialContent)
+			w.Write([]byte("No Content in network"))
 		} else {
 			w.WriteHeader(http.StatusOK)
 			postsMarshall, err := json.Marshal(posts)
